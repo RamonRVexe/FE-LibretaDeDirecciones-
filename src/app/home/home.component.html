@@ -1,1 +1,90 @@
-<p>home works!</p>
+<div class="container mx-auto">
+  <h1 class="text-3xl font-bold text-center mb-8">Lista de Contactos</h1>
+  <br>
+  <!-- Barra de búsqueda -->
+  <div class="flex flex-col md:flex-row justify-between items-center mb-4 space-y-4 md:space-y-0">
+    <input id="search" type="text" placeholder="Buscar..." class="p-2 border border-gray-300 rounded-lg w-full md:w-1/3" [(ngModel)]="searchTerm" (input)="filterContactos()"/>
+     <!-- Botón de agregar contacto -->
+    <div class="flex justify-end mb-4">
+      <button (click)="openModal()" class="px-4 py-2 bg-blue-500 text-white rounded">Agregar Contacto</button>
+      <app-add-contacto [isOpen]="isModalOpen" (close)="closeModal()"></app-add-contacto>
+    </div>
+  </div>
+
+
+
+  <!-- Tabla -->
+  <div class="overflow-x-auto">
+      <table class="min-w-full bg-white border border-gray-200 rounded-lg">
+          <thead>
+              <tr class="bg-gray-100 text-left text-gray-600 uppercase text-xs md:text-sm leading-normal">
+                  <th class="py-3 px-6">Nombre</th>
+                  <th class="py-3 px-6">Notas</th>
+                  <th class="py-3 px-6">Fecha Cumpleaños</th>
+                  <th class="py-3 px-6">Página Web</th>
+                  <th class="py-3 px-6">Empresa</th>
+                  <th class="py-3 px-6 text-center">Acciones</th>
+              </tr>
+          </thead>
+          <tbody id="contactTable" class="text-gray-600 text-xs md:text-sm font-light">
+              <tr *ngFor="let contacto of filteredContactos | paginate:{itemsPerPage:15, currentPage: page}" class="border-b border-gray-200 hover:bg-gray-100">
+                <td class="py-3 px-6">{{ contacto.nombre }}</td>
+                <td class="py-3 px-6">{{ contacto.notas }}</td>
+                <td class="py-3 px-6">{{ contacto.fecha_cumpleanos }}</td>
+                <td class="py-3 px-6"><a href="{{ contacto.pagina_web }}" class="text-blue-500 hover:underline">{{ contacto.pagina_web }}</a></td>
+                <td class="py-3 px-6">{{ contacto.empresa }}</td>
+                  <td class="py-3 px-6 text-center">
+                      <div class="flex item-center justify-center space-x-2">
+                          <button (click)="openViewModal(contacto)" class="w-8 md:w-10 transform hover:text-purple-500 hover:scale-110" title="Ver Información">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" />
+                              <path d="M21 21l-6 -6" />
+                            </svg>
+                          </button>
+                          <app-view-contacto></app-view-contacto>
+                          <button (click)="openUpdateModal(contacto)" class="w-8 md:w-10 transform hover:text-green-500 hover:scale-110" title="Editar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" />
+                              <path d="M13.5 6.5l4 4" />
+                            </svg>
+                          </button>
+                          <app-update-contacto></app-update-contacto>
+                          <button (click)="openDeleteModal(contacto)" class="w-8 md:w-10 transform hover:text-red-500 hover:scale-110" title="Eliminar">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trash" width="44" height="44" viewBox="0 0 24 24" stroke-width="1.5" stroke="#2c3e50" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                              <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                              <path d="M4 7l16 0" />
+                              <path d="M10 11l0 6" />
+                              <path d="M14 11l0 6" />
+                              <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" />
+                              <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" />
+                            </svg>
+                          </button>
+                          <app-delete-contacto (contactoEliminado)="loadContactos()"></app-delete-contacto>
+                      </div>
+                  </td>
+              </tr>
+          </tbody>
+      </table>
+  </div>
+
+  <!-- Paginación centrada -->
+  <div class="flex justify-center mt-4">
+    <pagination-controls (pageChange)="page = $event" previousLabel="Anterior" nextLabel="Siguiente"></pagination-controls>
+  </div>
+</div>
+
+<script>
+  // Script para la búsqueda en la tabla
+  document.getElementById('search').addEventListener('input', function() {
+    const searchValue = this.value.toLowerCase();
+    const rows = document.querySelectorAll('#contactTable tr');
+
+    rows.forEach(row => {
+        const cells = row.querySelectorAll('td');
+        const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(searchValue));
+        row.style.display = match ? '' : 'none';
+    });
+});
+</script>

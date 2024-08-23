@@ -1,0 +1,35 @@
+<!-- Modal -->
+<div class="fixed inset-0 flex items-center justify-center z-50" *ngIf="isOpen">
+  <div class="absolute inset-0 bg-black opacity-50" (click)="closeModal()"></div>
+  <div class="bg-white rounded-lg overflow-hidden shadow-lg z-10 max-w-lg w-full">
+    <div class="p-6">
+      <h2 class="text-lg font-semibold mb-4">Agregar Contacto</h2>
+      <form (ngSubmit)="agregarContacto(f)" #f="ngForm">
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700" for="nombre">Nombre</label>
+          <input type="text" id="nombre" [(ngModel)]="nombre" name="nombre" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50" required>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700" for="notas">Notas</label>
+          <textarea id="notas" [(ngModel)]="notas" name="notas" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50"></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700" for="fecha_cumpleanos">Fecha de Cumpleaños</label>
+          <input type="date" id="fecha_cumpleanos" [(ngModel)]="fechaCumpleanos" name="fecha_cumpleanos" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700" for="pagina_web">Pagina Web</label>
+          <input type="text" id="pagina_web" [(ngModel)]="paginaWeb" name="pagina_web" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
+        </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700" for="empresa">Empresa</label>
+          <input type="text" id="empresa" [(ngModel)]="empresa" name="empresa" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-opacity-50">
+        </div>
+        <div class="flex justify-end">
+          <button type="button" class="mr-2 px-4 py-2 bg-gray-300 rounded" (click)="closeModal()">Cancelar</button>
+          <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded">Agregar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
